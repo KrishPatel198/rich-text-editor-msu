@@ -39,13 +39,20 @@
 
   <!-- Emscripten loader -->
   <script src="app.js"></script>
-  <script>
-    createModule().then((Module) => {
-      window.Module = Module;
-      const script = document.createElement('script');
-      script.src = "index.js";
-      document.body.appendChild(script);
-    });
-  </script>
+<script>
+  createModule({
+    locateFile: (path) => {
+      if (path.endsWith('.wasm')) {
+        return 'app.wasm';
+      }
+      return path;
+    }
+  }).then((Module) => {
+    window.Module = Module;
+    const script = document.createElement('script');
+    script.src = "index.js";
+    document.body.appendChild(script);
+  });
+</script>
 </body>
 </html>
