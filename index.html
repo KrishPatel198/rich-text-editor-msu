@@ -40,26 +40,26 @@
 <!-- Emscripten loader -->
 <script src="app.js"></script>
 <script>
-  createModule({
-    locateFile: (p) => (p.endsWith('.wasm') ? 'app.wasm' : p)
-  }).then(() => {
-    /* load input.js first (defines MakeInput) */
-    const inputScript = document.createElement('script');
-    inputScript.src = 'input.js';
+  /* expose factory function exactly where index.js expects it */
+  window.Module = createModule;            
 
-    /* after input.js arrives, load index.js */
-    inputScript.onload = () => {
-      const indexScript = document.createElement('script');
-      indexScript.src = 'index.js';
-      indexScript.onload = () => {
-        /*  trigger the listener inside index.js  */
-        window.dispatchEvent(new Event('DOMContentLoaded'));
-      };
-      document.body.appendChild(indexScript);
+  /* load input.js first (defines MakeInput) */
+  const inputScript = document.createElement('script');
+  inputScript.src = 'input.js';
+
+  /* after input.js arrives, load index.js */
+  inputScript.onload = () => {
+    const indexScript = document.createElement('script');
+    indexScript.src = 'index.js';
+    indexScript.onload = () => {
+      /* now trigger the listener inside index.js */
+      window.dispatchEvent(new Event('DOMContentLoaded'));
     };
+    document.body.appendChild(indexScript);
+  };
 
-    document.body.appendChild(inputScript);
-  });
+  document.body.appendChild(inputScript);
+</script>
 </script>
 </body>
 </html>
