@@ -46,7 +46,18 @@
   </content>
 
   <!-- App/Wasm code (from Emscripten) -->
-  <script src="release/app.js"></script>
+  <script src="app.js"></script>
+  <!-- Load main JS logic after WASM is ready -->
+  <script>
+    createModule().then((Module) => {
+      window.Module = Module; // expose globally
+      const script = document.createElement('script');
+      script.src = "index.js";
+      document.body.appendChild(script);
+    });
+  </script>
+
+  
   <!-- Our app logic -->
   <script src="input.js"></script>
   <script src="index.js"></script>
