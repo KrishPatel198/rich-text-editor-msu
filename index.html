@@ -53,7 +53,7 @@
       indexScript.src = 'index.js';
       indexScript.onload = () => {
         /*  trigger the listener inside index.js  */
-        document.dispatchEvent(new Event('DOMContentLoaded'));
+        window.dispatchEvent(new Event('DOMContentLoaded'));
       };
       document.body.appendChild(indexScript);
     };
