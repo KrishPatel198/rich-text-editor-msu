@@ -1,65 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Text Editor</title>
 
-  <!-- fixes caching issue by adding timestamp -->
-  <link rel="stylesheet" type="text/css" href="index.css?v=1682734567" />
-  <link rel="stylesheet" type="text/css" href="input.css?v=1682734567" />
-  <!-- New enhanced output styling -->
-  <link rel="stylesheet" type="text/css" href="output-styles.css?v=1682734567" />
-  <!-- Use google fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Mono&display=swap" rel="stylesheet">
-  <!-- Force reload styles -->
+  <!-- CSS styles -->
+  <link rel="stylesheet" href="index.css?v=forceReload" />
+  <link rel="stylesheet" href="input.css?v=forceReload" />
+  <link rel="stylesheet" href="output-styles.css?v=forceReload" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Mono&display=swap" rel="stylesheet" />
+
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Force CSS refresh
+    document.addEventListener('DOMContentLoaded', function () {
       const links = document.getElementsByTagName('link');
       for (let i = 0; i < links.length; i++) {
         if (links[i].rel === 'stylesheet') {
           const href = links[i].href;
-          links[i].href = href + (href.indexOf('?') >= 0 ? '&' : '?') + 'forceReload=' + Date.now();
+          links[i].href = href + (href.indexOf('?') >= 0 ? '&' : '?') + 't=' + Date.now();
         }
       }
     });
   </script>
 </head>
+
 <body>
   <content>
     <div class="rich-input">
       <div class="bar" id="toolbar"></div>
       <div id="text-editor"></div>
     </div>
-
-    <!-- Right-hand side output with tabs -->
     <o>
-      <!-- Tab buttons -->
-      <div id="tab-buttons">
-      </div>
-
-      <!-- Tab contents will be inserted here by JavaScript -->
+      <div id="tab-buttons"></div>
     </o>
   </content>
 
-  <!-- App/Wasm code (from Emscripten) -->
+  <!-- Emscripten loader -->
   <script src="app.js"></script>
-  <!-- Load main JS logic after WASM is ready -->
   <script>
     createModule().then((Module) => {
-      window.Module = Module; // expose globally
+      window.Module = Module;
       const script = document.createElement('script');
       script.src = "index.js";
       document.body.appendChild(script);
     });
   </script>
-
-  
-  <!-- Our app logic -->
-  <script src="input.js"></script>
-  <script src="index.js"></script>
 </body>
 </html>
