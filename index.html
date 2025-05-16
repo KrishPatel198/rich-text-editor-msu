@@ -37,21 +37,24 @@
     </o>
   </content>
 
-  <!-- Emscripten loader -->
-  <script src="app.js"></script>
+<!-- Emscripten loader -->
+<script src="app.js"></script>
 <script>
   createModule({
-    locateFile: (path) => {
-      if (path.endsWith('.wasm')) {
-        return 'app.wasm';
-      }
-      return path;
-    }
-  }).then((Module) => {
-    window.Module = Module;
-    const script = document.createElement('script');
-    script.src = "index.js";
-    document.body.appendChild(script);
+    locateFile: (p) => (p.endsWith('.wasm') ? 'app.wasm' : p)
+  }).then(() => {
+    /* load input.js (defines MakeInput, etc.) */
+    const inputScript = document.createElement('script');
+    inputScript.src = 'input.js';
+
+    /* when input.js is ready, load index.js (builds the UI) */
+    inputScript.onload = () => {
+      const indexScript = document.createElement('script');
+      indexScript.src = 'index.js';
+      document.body.appendChild(indexScript);
+    };
+
+    document.body.appendChild(inputScript);
   });
 </script>
 </body>
