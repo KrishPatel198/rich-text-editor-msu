@@ -42,12 +42,14 @@
 <script>
   createModule({
     locateFile: (p) => (p.endsWith('.wasm') ? 'app.wasm' : p)
-  }).then(() => {
-    /* load input.js (defines MakeInput, etc.) */
+  }).then((Module) => {           
+    window.Module = Module;       
+
+    /* 1️⃣ load input.js first (defines MakeInput) */
     const inputScript = document.createElement('script');
     inputScript.src = 'input.js';
 
-    /* when input.js is ready, load index.js (builds the UI) */
+    /* 2️⃣ once input.js is ready, load index.js (builds UI) */
     inputScript.onload = () => {
       const indexScript = document.createElement('script');
       indexScript.src = 'index.js';
